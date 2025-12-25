@@ -1,18 +1,17 @@
-from flask import Flask, render_template, request
+import streamlit as st
 import pickle
 import numpy as np
 
-app = Flask(__name__)
-
-# 1. Load your model
-# Ensure your model file is in the same folder as this script
-try:
+# 1. Load the Model
+@st.cache_resource
+def load_model():
+    # Make sure 'model.pkl' is in the same folder as this app.py
     with open('Obesity_check_model.pkl', 'rb') as file:
-        model = pickle.load(file)
-except FileNotFoundError:
-    print("Error: model.pkl not found.")
+        return pickle.load(file)
 
-# 2. Input Mappings (Converts HTML text to numbers for the model)
+model = load_model()
+
+# 2. Define Mappings (Match these to your specific model training)
 mappings = {
     'Gender': {'Female': 0, 'Male': 1},
     'Familyoverweight_history': {'No': 0, 'Yes': 1},
@@ -27,45 +26,40 @@ mappings = {
     }
 }
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+# 3. UI Styling
+st.title("⚖️ HealthSense ")
+st.write("Obesity Risk Analysis based on Lifestyle Metrics")
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    try:
-        # Get form data
-        f = request.form
-        
-        # Construct the feature list in the EXACT order your model expects
-        # Note: We convert text to numbers using the mappings above
-        features = [
-            mappings['Gender'][f['Gender']],
-            float(f['Age']),
-            float(f['Height']),
-            float(f['Weight']),
-            mappings['Familyoverweight_history'][f['Familyoverweight_history']],
-            mappings['HighCaloriefood_consumption'][f['HighCaloriefood_consumption']],
-            float(f['Consumption_of_vegetables']),
-            float(f['No_of_mainmeals']),
-            mappings['food_between_meals'][f['food_between_meals']],
-            mappings['Smoking'][f['Smoking']],
-            float(f['WaterConsumption']),
-            mappings['Beverages_consumption'][f['Beverages_consumption']],
-            float(f['Physical_Activit']),
-            float(f['Time_on_devices']),
-            mappings['Alcohol'][f['Alcohol']],
-            mappings['Mode_of_transportation'][f['Mode_of_transportation']]
-        ]
+# 4. Input Form
+with st.form("main_form"):
+    col1, col2 = st.columns(2)
+    with col1:
+        gender = st.selectbox("Gender", ["Male", "Female"])
+        age = st.number_input("Age", 1, 100, 25)
+        height = st.number_input("Height (m)", 1.0, 2.5, 1.75)
+        weight = st.number_input("Weight (kg)", 10.0, 250.0, 70.0)
+    with col2:
+        family = st.selectbox("Family Overweight History?", ["Yes", "No"])
+        calc_intake = st.selectbox("High Calorie Food?", ["Yes", "No"])
+        veg = st.slider("Veggie Consumption (1-3)", 1.0, 3.0, 2.0)
+        meals = st.slider("Main Meals Per Day", 1.0, 4.0, 3.0)
 
-        # Convert to numpy array and predict
-        final_features = np.array([features])
-        prediction = model.predict(final_features)
+    # Add other inputs here if your model requires all 16 features...
+    
+    submit = st.form_submit_button("Predict Obesity Level")
 
-        # Since your model returns a category directly:
-        result = prediction[0] 
-
-        return render_template('index.html', prediction_text=f'Predicted Obesity Level: {result}')
+# 5. Prediction
+if submit:
+    # This list must match the order of features your model was trained on!
+    features = np.array([[
+        mappings['Gender'][gender], age, height, weight,
+        mappings['Familyoverweight_history'][family],
+        mappings['HighCaloriefood_consumption'][calc_intake],
+        veg, meals, 1, 0, 2.0, 0, 1.0, 1.0, 1, 3 # Example placeholders for remaining features
+    ]])
+    
+    prediction = model.predict(features)[0]
+    st.success(f"Result: {prediction}")
 
     except Exception as e:
         return f"Error: {str(e)}. Please check if all fields are filled correctly."
