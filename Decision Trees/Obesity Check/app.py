@@ -14,7 +14,7 @@ st.markdown("""
     h1 { color: #1e3d59; text-align: center; font-family: 'Helvetica'; }
     .reportview-container .main .block-container { padding-top: 2rem; }
     </style>
-    """, unsafe_index=True)
+    """, unsafe_allow_html=True)
 
 # --- MODEL LOADING ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
