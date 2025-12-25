@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthSense| Obesity Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-color: #00d2ff;
+            --button-grad: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Professional Health/Fitness Background Image */
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-card {
+            background: var(--glass);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 900px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .brand-header h1 {
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+        }
+
+        .brand-header p {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-top: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            padding: 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background-color: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3a7bd5;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(58, 123, 213, 0.1);
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .submit-btn {
+            background: var(--button-grad);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(58, 123, 213, 0.4);
+        }
+
+        /* Result Section */
+        .result-container {
+            margin-top: 40px;
+            padding: 25px;
+            background: #f0f9ff;
+            border-radius: 16px;
+            border: 2px solid #bae6fd;
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .result-title {
+            color: #0369a1;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            color: #0c4a6e;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .main-card { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-card">
+    <div class="brand-header">
+        <h1>HealthSense </h1>
+        <p>Obesity Risk Analysis</p>
+    </div>
+
+    <form action="/predict" method="POST">
+        <div class="form-grid">
+            
+            <div class="input-group">
+                <label>Gender</label>
+                <select name="Gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Age (Years)</label>
+                <input type="number" name="Age" step="0.1" placeholder="Ex: 25" required>
+            </div>
+
+            <div class="input-group">
+                <label>Height (Meters)</label>
+                <input type="number" name="Height" step="0.01" placeholder="Ex: 1.75" required>
+            </div>
+
+            <div class="input-group">
+                <label>Weight (Kilograms)</label>
+                <input type="number" name="Weight" step="0.1" placeholder="Ex: 72" required>
+            </div>
+
+            <div class="input-group">
+                <label>Family Overweight History</label>
+                <select name="Familyoverweight_history" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>High Calorie Food Intake</label>
+                <select name="HighCaloriefood_consumption" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Veggie Consumption (Scale 1-3)</label>
+                <input type="number" name="Consumption_of_vegetables" step="0.1" min="1" max="3" required>
+            </div>
+
+            <div class="input-group">
+                <label>Daily Main Meal(Scale 1-4)</label>
+                <input type="number" name="No_of_mainmeals" step="0.1" min="1" max="4" required>
+            </div>
+
+            <div class="input-group">
+                <label>Snacking Frequency</label>
+                <select name="food_between_meals" required>
+                    <option value="Sometimes">Sometimes</option>
+                    <option value="Frequently">Frequently</option>
+                    <option value="Always">Always</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Smoking Status</label>
+                <select name="Smoking" required>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Water Intake (Liters)(Scale 1-3)</label>
+                <input type="number" name="WaterConsumption" step="0.1" min="1" max="3" required>
+            </div>
+
+            <div class="input-group">
+                <label>Monitor Calorie Intake</label>
+                <select name="Beverages_consumption" required>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Physical Activity (Scale 0-3)</label>
+                <input type="number" name="Physical_Activit" step="0.1" min="0" max="3" required>
+            </div>
+
+            <div class="input-group">
+                <label>Daily Device Usage (Hours)(Scale 1-2)</label>
+                <input type="number" name="Time_on_devices" step="0.1" min="0" max="2" required>
+            </div>
+
+            <div class="input-group">
+                <label>Alcohol Consumption</label>
+                <select name="Alcohol" required>
+                    <option value="No">No</option>
+                    <option value="Sometimes">Sometimes</option>
+                    <option value="Frequently">Frequently</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Primary Transportation</label>
+                <select name="Mode_of_transportation" required>
+                    <option value="Public_Transportation">Public Transportation</option>
+                    <option value="Automobile">Automobile</option>
+                    <option value="Walking">Walking</option>
+                    <option value="Motorbike">Motorbike</option>
+                    <option value="Bike">Bike</option>
+                </select>
+            </div>
+
+            <div class="full-width">
+                <button type="submit" class="submit-btn">RUN ANALYSIS</button>
+            </div>
+        </div>
+    </form>
+
+    {% if prediction_text %}
+    <div class="result-container">
+        <div class="result-title">Analysis Result</div>
+        <p class="result-value">{{ prediction_text }}</p>
+    </div>
+    {% endif %}
+
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* ... (Keep your existing styles) ... */
+
+    .github-footer {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000; /* Ensures it stays on top of everything */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    .github-footer p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.75rem;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .github-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 12px 20px;
+        border-radius: 50px;
+        background: rgba(15, 23, 42, 0.8); /* Dark Slate / Midnight blue */
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .github-link:hover {
+        background: #24292e; /* Classic GitHub color */
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        border-color: #00d2ff;
+    }
+
+    .github-link i {
+        font-size: 1.4rem;
+    }
+</style>
+
+<div class="github-footer">
+    <p>Code & Docs</p>
+    <a href="https://github.com/adityanairrr/Machine-Learning-Projects" target="_blank" class="github-link">
+        <i class="fab fa-github"></i>
+        <span>GitHub</span>
+    </a>
+</div>
+</body>
+</html>
