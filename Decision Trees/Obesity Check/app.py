@@ -9,10 +9,24 @@ st.set_page_config(page_title="Obesity Risk Analyzer", layout="wide")
 # --- CUSTOM CSS (To make it look like your HTML site) ---
 st.markdown("""
     <style>
-    .main { background-color: #f5f7f9; }
-    .stButton>button { width: 100%; border-radius: 5px; height: 3em; background-color: #ff4b4b; color: white; }
-    h1 { color: #1e3d59; text-align: center; font-family: 'Helvetica'; }
-    .reportview-container .main .block-container { padding-top: 2rem; }
+    /* Background Gradient */
+    .stApp {
+        background: linear-gradient(to right, #e0eafc, #cfdef3);
+    }
+    /* Prediction Card Styling */
+    .result-card {
+        background-color: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        text-align: center;
+        border-left: 10px solid #ff4b4b;
+    }
+    .result-text {
+        font-size: 30px;
+        font-weight: bold;
+        color: #1e3d59;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -86,7 +100,7 @@ else:
             
             # Categorical Mapping for CAEC, CALC, MTRANS
             food_between_meals_map = {"no": 0, "Sometimes": 3, "Frequently": 2, "Always": 1}
-            Alcohol_map = {"yes": 1, "no": 0, "Sometimes": 2}
+            Alcohol_map = {"Frequently": 1, "no": 0, "Sometimes": 2}
             Mode_of_transportation_map = {"Automobile": 0, "Bike": 1, "Motorbike": 2, "Public_Transportation": 3, "Walking": 4}
 
             # ARRANGE ALL 16 FEATURES (Order must match your model training!)
