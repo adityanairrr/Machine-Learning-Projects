@@ -50,19 +50,18 @@ with st.form("main_form"):
 
 # 5. Prediction
 if submit:
-    # This list must match the order of features your model was trained on!
-    features = np.array([[
-        mappings['Gender'][gender], age, height, weight,
-        mappings['Familyoverweight_history'][family],
-        mappings['HighCaloriefood_consumption'][calc_intake],
-        veg, meals, 1, 0, 2.0, 0, 1.0, 1.0, 1, 3 # Example placeholders for remaining features
-    ]])
-    
-    prediction = model.predict(features)[0]
-    st.success(f"Result: {prediction}")
-
+    try:
+        # This block must be indented by 4 spaces
+        features = np.array([[
+            mappings['Gender'][gender], age, height, weight,
+            mappings['Familyoverweight_history'][family],
+            mappings['HighCaloriefood_consumption'][calc_intake],
+            veg, meals, 1, 0, 2.0, 0, 1.0, 1.0, 1, 3 
+        ]])
+        
+        prediction = model.predict(features)[0]
+        st.success(f"Result: {prediction}")
+        
     except Exception as e:
-        return f"Error: {str(e)}. Please check if all fields are filled correctly."
-
-if __name__ == "__main__":
-    app.run(debug=True)
+        # The 'except' must line up vertically with the 'try'
+        st.error(f"Prediction Error: {e}")
