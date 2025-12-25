@@ -70,7 +70,7 @@ else:
             Physical_Activity = st.slider("Physical Activity (0-3)", 0.0, 3.0, 1.0)
             Time_on_devices = st.slider("Tech Usage (0-2 hours)", 0.0, 2.0, 1.0)
         with col8:
-            Alcohol = st.selectbox("Alcohol Intake", ["no", "Sometimes", "Frequently", "Always"])
+            Alcohol = st.selectbox("Alcohol Intake", ["no", "Sometimes", "yes"])
             Mode_of_transportation = st.selectbox("Transport Mode", ["Public_Transportation", "Automobile", "Walking", "Motorbike", "Bike"])
 
         # --- PREDICTION LOGIC ---
@@ -85,14 +85,14 @@ else:
             Beverages_consumption_val = 1 if Beverages_consumption == "yes" else 0
             
             # Categorical Mapping for CAEC, CALC, MTRANS
-            food_between_meals_map = {"no": 0, "Sometimes": 1, "Frequently": 2, "Always": 3}
-            Alcohol_map = {"no": 0, "Sometimes": 1, "Frequently": 2, "Always": 3}
+            food_between_meals_map = {"no": 0, "Sometimes": 3, "Frequently": 2, "Always": 1}
+            Alcohol_map = {"yes": 1, "no": 0, "Sometimes": 2}
             Mode_of_transportation_map = {"Automobile": 0, "Bike": 1, "Motorbike": 2, "Public_Transportation": 3, "Walking": 4}
 
             # ARRANGE ALL 16 FEATURES (Order must match your model training!)
             features = np.array([[
                 Gender_val, Age,Height, Weight,  Familyoverweight_history_val, HighCaloriefood_consumption_val, 
-                Consumption_of_vegetables,No_of_mainmeals,  food_between_meals_map[ food_between_meals], Smoking_val, CH20, Beverages_consumption_val, 
+                Consumption_of_vegetables,No_of_mainmeals, food_between_meals_map[ food_between_meals], Smoking_val, CH20, Beverages_consumption_val, 
                 Physical_Activity, Time_on_devices,  Alcohol_map[Alcohol], Mode_of_transportation_map[Mode_of_transportation]
             ]])
 
