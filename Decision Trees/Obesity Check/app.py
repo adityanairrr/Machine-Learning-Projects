@@ -165,7 +165,7 @@ else:
 
 # --- 4. GITHUB ICON (Keep this OUTSIDE the 'if submit' block so it's always visible) ---
 st.markdown(f"""
-    <a href="https://github.com/adityanairrr/Machine-Learning-Projects" target="_blank" class="github-link">
+    <a href="https://github.com/adityanairrr/Machine-Learning-Projects/tree/main/Decision%20Trees/Obesity%20Check" target="_blank" class="github-link">
         <img src="https://cdns.iconmonstr.com/wp-content/releases/preview/2012/240/iconmonstr-github-1.png" class="github-icon">
     </a>
 """, unsafe_allow_html=True)
