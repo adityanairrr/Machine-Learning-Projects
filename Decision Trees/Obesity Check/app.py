@@ -27,6 +27,22 @@ st.markdown("""
         font-weight: bold;
         color: #1e3d59;
     }
+    .github-link {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        text-decoration: none;
+        transition: transform 0.3s ease;
+        z-index: 1000;
+    }
+    .github-link:hover {
+        transform: scale(1.2);
+    }
+    .github-icon {
+        width: 40px;
+        height: 40px;
+        filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.2));
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -44,7 +60,7 @@ def load_model():
 model = load_model()
 
 # --- HEADER ---
-st.write("# ⚖️ Obesity Level Prediction Dashboard")
+st.write("# ⚖️ Obesity Level Prediction")
 st.write("---")
 
 if model is None:
@@ -110,7 +126,46 @@ else:
                 Physical_Activity, Time_on_devices,  Alcohol_map[Alcohol], Mode_of_transportation_map[Mode_of_transportation]
             ]])
 
-            prediction = model.predict(features)
-            
+# --- 1. GET THE PREDICTION ---
+            raw_prediction = model.predict(features)
+            res = raw_prediction[0]  # Extract the string (e.g., 'Normal_Weight')
+
+            # --- 2. SET THE COLOR ---
+            if "Obesity" in res:
+                bg_color = "#e74c3c"  # Red
+            elif "Overweight" in res:
+                bg_color = "#f39c12"  # Orange
+            elif "Normal" in res:
+                bg_color = "#2ecc71"  # Green
+            elif "Insufficient" in res or "Underweight" in res:
+                bg_color = "#3498db"  # Blue
+            else:
+                bg_color = "#95a5a6"  # Gray
+
             st.write("---")
-            st.header(f"Prediction: {prediction[0]}")
+            
+            # --- 3. DISPLAY THE COLOR BOX ---
+            # We use .replace('_', ' ') so 'Normal_Weight' becomes 'Normal Weight'
+            st.markdown(f"""
+                <div style="
+                    background-color: {bg_color}; 
+                    padding: 30px; 
+                    border-radius: 15px; 
+                    box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+                    text-align: center;">
+                    <h3 style="color: white; margin-bottom: 5px; font-family: sans-serif; font-weight: 400;">Predicted Health Category</h3>
+                    <h1 style="color: white; margin-top: 0; font-size: 45px; font-family: sans-serif;">{res.replace('_', ' ')}</h1>
+                </div>
+            """, unsafe_allow_html=True)
+
+            st.balloons()
+            
+            # You can keep this simple text prediction if you want it as a backup
+            st.info(f"Analysis complete for user.")
+
+# --- 4. GITHUB ICON (Keep this OUTSIDE the 'if submit' block so it's always visible) ---
+st.markdown(f"""
+    <a href="https://github.com/adityanairrr/Machine-Learning-Projects" target="_blank" class="github-link">
+        <img src="https://cdns.iconmonstr.com/wp-content/releases/preview/2012/240/iconmonstr-github-1.png" class="github-icon">
+    </a>
+""", unsafe_allow_html=True)
