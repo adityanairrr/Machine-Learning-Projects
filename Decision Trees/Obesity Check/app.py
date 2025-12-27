@@ -116,7 +116,7 @@ else:
             
             # Categorical Mapping for CAEC, CALC, MTRANS
             food_between_meals_map = {"no": 0, "Sometimes": 3, "Frequently": 2, "Always": 1}
-            Alcohol_map = {"Frequently": 1, "no": 0, "Sometimes": 2}
+            Alcohol_map = {"yes": 1, "no": 0, "Sometimes": 2}
             Mode_of_transportation_map = {"Automobile": 0, "Bike": 1, "Motorbike": 2, "Public_Transportation": 3, "Walking": 4}
 
             # ARRANGE ALL 16 FEATURES (Order must match your model training!)
