@@ -169,5 +169,3 @@ st.markdown(f"""
         <img src="https://cdns.iconmonstr.com/wp-content/releases/preview/2012/240/iconmonstr-github-1.png" class="github-icon">
     </a>
 """, unsafe_allow_html=True)
-
-st.markdown("![Visitor Count](https://profile-counter.glitch.me/{adityanairrr}/count.svg)")
